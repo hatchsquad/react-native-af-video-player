@@ -127,7 +127,8 @@ class Controls extends Component {
       currentTime,
       duration,
       theme,
-      inlineOnly
+      inlineOnly,
+      disableSeek
     } = this.props
 
     const { center, ...controlBar } = theme
@@ -161,6 +162,7 @@ class Controls extends Component {
             onSeekRelease={pos => this.onSeekRelease(pos)}
             progress={progress}
             currentTime={currentTime}
+            disableSeek={disableSeek}
             duration={duration}
             theme={controlBar}
             inlineOnly={inlineOnly}
@@ -197,7 +199,8 @@ Controls.propTypes = {
   duration: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   logo: PropTypes.string.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  disableSeek:PropTypes.bool
 }
 
 export { Controls }

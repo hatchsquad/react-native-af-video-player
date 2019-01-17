@@ -23,18 +23,18 @@ const ControlBar = (props) => {
     muted,
     fullscreen,
     theme,
-    inlineOnly
+    inlineOnly,
+    disableSeek,
   } = props
-
   return (
     <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']} style={styles.container}>
       <Time time={currentTime} theme={theme.seconds} />
-      <Scrubber
+      {!disableSeek && <Scrubber
         onSeek={pos => onSeek(pos)}
         onSeekRelease={pos => onSeekRelease(pos)}
         progress={progress}
         theme={{ scrubberThumb: theme.scrubberThumb, scrubberBar: theme.scrubberBar }}
-      />
+      />}
       <ToggleIcon
         paddingLeft
         theme={theme.volume}
@@ -44,7 +44,7 @@ const ControlBar = (props) => {
         iconOn="volume-mute"
         size={20}
       />
-      <Time time={duration} theme={theme.duration} />
+      {!disableSeek && <Time time={duration} theme={theme.duration} />}
       { !inlineOnly &&
       <ToggleIcon
         paddingRight
@@ -69,7 +69,8 @@ ControlBar.propTypes = {
   progress: PropTypes.number.isRequired,
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  disableSeek:PropTypes.bool
 }
 
 export { ControlBar }
