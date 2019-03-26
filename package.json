@@ -1,7 +1,8 @@
 {
   "name": "react-native-vedantu-video-player",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "dependencies": {
+    "react-native-indicators": "^0.13.0",
     "react-native-keep-awake": "^2.0.6",
     "react-native-orientation": "^3.1.0",
     "react-native-slider": "https://github.com/abbasfreestyle/react-native-slider.git",
