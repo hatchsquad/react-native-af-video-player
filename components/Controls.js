@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
     zIndex: 99
   },
   flex: {
-    flex: 1
+    flex: 1,
+    flexDirection: 'row'
   },
   playButton: {
     // opacity: 0.9,
