@@ -285,12 +285,16 @@ class Video extends Component {
   }
 
   seekTo(seconds) {
-    const percent = seconds / this.state.duration
-    if (seconds > this.state.duration) {
-      throw new Error(`Current time (${seconds}) exceeded the duration ${this.state.duration}`)
+    if ((seconds > this.state.duration || seconds < 0) && !(seconds <10 && seconds >= 0)) {
+      // throw new Error(`Current time (${seconds}) exceeded the duration ${this.state.duration}`)
       return false
     }
-    return this.onSeekRelease(percent)
+    else{
+      const percent = seconds / this.state.duration
+      const currentTime = percent * this.state.duration
+      this.setState({ seeking: true, currentTime })
+      return this.onSeekRelease(percent)
+    }
   }
 
   progress(time) {
@@ -356,6 +360,8 @@ class Video extends Component {
       controlDuration,
       disableSeek,
       progressUpdateInterval,
+      onBack,
+      isFullscreen
     } = this.props
 
     const inline = {
@@ -426,6 +432,9 @@ class Video extends Component {
           theme={setTheme}
           inlineOnly={inlineOnly}
           controlDuration={controlDuration}
+          onBack = {onBack}
+          isFullscreen={isFullscreen}
+          seekTo={seconds => this.seekTo(seconds)}
         />
       </Animated.View>
     )
@@ -478,7 +487,9 @@ Video.propTypes = {
   title: PropTypes.string,
   theme: PropTypes.object,
   controlDuration: PropTypes.number,
-  resizeMode: PropTypes.string
+  resizeMode: PropTypes.string,
+  onBack: PropTypes.func,
+  isFullscreen: PropTypes.bool
 }
 
 Video.defaultProps = {
@@ -508,7 +519,9 @@ Video.defaultProps = {
   title: '',
   theme: defaultTheme,
   controlDuration: 3,
-  resizeMode: 'contain'
+  resizeMode: 'contain',
+  onBack : () => {},
+  isFullscreen: false
 }
 
 export default Video
