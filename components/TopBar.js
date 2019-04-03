@@ -53,7 +53,7 @@ const TopBar = (props) => {
     <LinearGradient colors={['rgba(0,0,0,0.75)', 'rgba(0,0,0,0)']} style={styles.container}>
       <View style={styles.row}>
         { logo && <Image style={styles.logo} resizeMode="contain" {...checkSource(logo)} />}
-        { onBack != null && <Icons onPress={onBack} name={"arrow-back"} color="#fff" size={24} style={{marginLeft: 10}}/>}
+        { (onBack != null && onBack != undefined) && <Icons onPress={onBack} name={"arrow-back"} color="#fff" size={24} style={{marginLeft: 10}}/>}
         { isFullscreen && <Text
           style={[styles.title, { color: theme.title }]}
           numberOfLines={1}
