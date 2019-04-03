@@ -4,8 +4,10 @@ import {
   View,
   Animated,
   StyleSheet,
-  TouchableWithoutFeedback as Touchable
+  TouchableWithoutFeedback as Touchable,
+  Text
 } from 'react-native'
+import Icons from "react-native-vector-icons/MaterialIcons";
 import {
   PlayButton,
   ControlBar,
@@ -13,7 +15,7 @@ import {
   TopBar,
   ProgressBar
 } from './'
-
+const backgroundColor = "transparent";
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -21,6 +23,16 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1
+  },
+  playButton: {
+    // opacity: 0.9,
+    position: "absolute"
+  },
+  playContainer: {
+    flex: 1,
+    backgroundColor,
+    alignItems: "center",
+    justifyContent: "center"
   }
 })
 
@@ -128,28 +140,67 @@ class Controls extends Component {
       duration,
       theme,
       inlineOnly,
-      disableSeek
+      disableSeek,
+      onBack,
+      isFullscreen,
+      seekTo
     } = this.props
 
     const { center, ...controlBar } = theme
 
     return (
       <Touchable onPress={() => this.hideControls()}>
-        <Animated.View style={[styles.container, { opacity: this.animControls }]}>
+        <Animated.View style={[styles.container, { opacity: this.animControls, backgroundColor: "#000000AA" }]}>
           <TopBar
             title={title}
             logo={logo}
             more={more}
             onMorePress={() => onMorePress()}
             theme={{ title: theme.title, more: theme.more }}
+            isFullscreen={isFullscreen}
+            onBack={onBack}
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
+          <View style={styles.playContainer}>
+              <Touchable onPress={() => seekTo(currentTime - 10)}>
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Text style={{ position: "relative", color: "#fff", fontSize: 9 }}>
+                    10
+                  </Text>
+                  <Icons
+                    style={[styles.playButton, { transform: [{ scaleX: -1 }] }]}
+                    name={"refresh"}
+                    color={center}
+                    size={35}
+                  />
+                </View>
+              </Touchable>
+            </View>
             <PlayButton
               onPress={() => this.props.togglePlay()}
               paused={paused}
               loading={loading}
               theme={center}
             />
+            <View style={styles.playContainer}>
+              <Touchable onPress={() => seekTo(currentTime + 10)}>
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Text style={{ position: "relative", color: "#fff", fontSize: 9 }}>
+                    10
+                  </Text>
+                  <Icons
+                    style={styles.playButton}
+                    name={"refresh"}
+                    color={center}
+                    size={35}
+                  />
+                </View>
+              </Touchable>
+            </View>
           </Animated.View>
           <ControlBar
             toggleFS={() => this.props.toggleFS()}
@@ -200,7 +251,10 @@ Controls.propTypes = {
   title: PropTypes.string.isRequired,
   logo: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired,
-  disableSeek:PropTypes.bool
+  disableSeek:PropTypes.bool,
+  onBack: PropTypes.func,
+  isFullscreen: PropTypes.bool.isRequired,
+  seekTo: PropTypes.func.isRequired,
 }
 
 export { Controls }

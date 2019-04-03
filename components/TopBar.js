@@ -8,6 +8,7 @@ import {
   Image
 } from 'react-native'
 
+import Icons from 'react-native-vector-icons/MaterialIcons'
 import LinearGradient from 'react-native-linear-gradient'
 import { ToggleIcon } from './'
 import { checkSource } from './utils'
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    alignSelf: 'center',
+    // alignSelf: 'center',
     alignItems: 'center'
   },
   title: {
@@ -44,19 +45,22 @@ const TopBar = (props) => {
     more,
     title,
     theme,
-    onMorePress
+    onMorePress,
+    onBack,
+    isFullscreen
   } = props
   return (
     <LinearGradient colors={['rgba(0,0,0,0.75)', 'rgba(0,0,0,0)']} style={styles.container}>
       <View style={styles.row}>
         { logo && <Image style={styles.logo} resizeMode="contain" {...checkSource(logo)} />}
-        <Text
+        { onBack != null && <Icons onPress={onBack} name={"arrow-back"} color="#fff" size={24} style={{marginLeft: 10}}/>}
+        { isFullscreen && <Text
           style={[styles.title, { color: theme.title }]}
           numberOfLines={1}
           ellipsizeMode="tail"
         >
           {title}
-        </Text>
+        </Text>}
         { more &&
           <ToggleIcon
             style={styles.more}
@@ -78,7 +82,9 @@ TopBar.propTypes = {
   logo: PropTypes.string.isRequired,
   more: PropTypes.bool.isRequired,
   onMorePress: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  onBack : PropTypes.func,
+  isFullscreen: PropTypes.bool
 }
 
 export { TopBar }

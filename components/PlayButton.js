@@ -7,7 +7,7 @@ const backgroundColor = 'transparent'
 
 const styles = StyleSheet.create({
   playButton: {
-    opacity: 0.9
+    // opacity: 0.9
   },
   playContainer: {
     flex: 1,
@@ -24,9 +24,9 @@ const PlayButton = props => (
     >
       <Icons
         style={styles.playButton}
-        name={props.paused ? 'play-circle-outline' : 'pause-circle-outline'}
+        name={props.paused ? 'play-arrow' : 'pause'}
         color={props.theme}
-        size={75}
+        size={52}
       />
     </TouchableOpacity>
   </View>
