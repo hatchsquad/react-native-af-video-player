@@ -164,7 +164,7 @@ class Controls extends Component {
           <View style={styles.playContainer}>
               <Touchable onPress={() => seekTo(currentTime - 10)}>
                 <View
-                  style={{ justifyContent: "center", alignItems: "center" }}
+                  style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
                 >
                   <Text style={{ position: "relative", color: "#fff", fontSize: 9 }}>
                     10
@@ -187,7 +187,7 @@ class Controls extends Component {
             <View style={styles.playContainer}>
               <Touchable onPress={() => seekTo(currentTime + 10)}>
                 <View
-                  style={{ justifyContent: "center", alignItems: "center" }}
+                  style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
                 >
                   <Text style={{ position: "relative", color: "#fff", fontSize: 9 }}>
                     10
