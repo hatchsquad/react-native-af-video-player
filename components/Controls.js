@@ -160,6 +160,7 @@ class Controls extends Component {
             theme={{ title: theme.title, more: theme.more }}
             isFullscreen={isFullscreen}
             onBack={onBack}
+            toggleFS={() => this.props.toggleFS()}
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
           <View style={styles.playContainer}>
