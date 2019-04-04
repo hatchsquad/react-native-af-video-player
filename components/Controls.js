@@ -163,7 +163,7 @@ class Controls extends Component {
             toggleFS={() => this.props.toggleFS()}
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
-          <View style={styles.playContainer}>
+          { !disableSeek && <View style={styles.playContainer}>
               <Touchable onPress={() => seekTo(currentTime - 10)}>
                 <View
                   style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
@@ -179,14 +179,14 @@ class Controls extends Component {
                   />
                 </View>
               </Touchable>
-            </View>
+            </View>}
             <PlayButton
               onPress={() => this.props.togglePlay()}
               paused={paused}
               loading={loading}
               theme={center}
             />
-            <View style={styles.playContainer}>
+            { !disableSeek && <View style={styles.playContainer}>
               <Touchable onPress={() => seekTo(currentTime + 10)}>
                 <View
                   style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
@@ -202,7 +202,7 @@ class Controls extends Component {
                   />
                 </View>
               </Touchable>
-            </View>
+            </View>}
           </Animated.View>
           <ControlBar
             toggleFS={() => this.props.toggleFS()}
