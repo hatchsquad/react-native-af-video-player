@@ -48,6 +48,15 @@ class Controls extends Component {
     this.animControls = new Animated.Value(1)
     this.scale = new Animated.Value(1)
     this.progressbar = new Animated.Value(2)
+    this.onBackButtonClickSeek = this.onBackButtonClickSeek.bind(this);
+    this.onForwardButtonClickSeek =  this.onForwardButtonClickSeek.bind(this);
+  }
+
+  onBackButtonClickSeek(currentTime){
+    this.props.seekTo(currentTime - 10);
+  }
+  onForwardButtonClickSeek(currentTime){
+    this.props.seekTo(currentTime + 10);
   }
 
   componentDidMount() {
@@ -164,7 +173,7 @@ class Controls extends Component {
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
           { !disableSeek && <View style={styles.playContainer}>
-              <Touchable onPress={() => seekTo(currentTime - 10)}>
+              <Touchable onPress={() => this.onBackButtonClickSeek(currentTime)}>
                 <View
                   style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
                 >
@@ -186,8 +195,8 @@ class Controls extends Component {
               loading={loading}
               theme={center}
             />
-            { !disableSeek && <View style={styles.playContainer}>
-              <Touchable onPress={() => seekTo(currentTime + 10)}>
+            { !disableSeek ? <View style={styles.playContainer}>
+              <Touchable onPress={() => this.onForwardButtonClickSeek(currentTime)}>
                 <View
                   style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
                 >
@@ -202,7 +211,7 @@ class Controls extends Component {
                   />
                 </View>
               </Touchable>
-            </View>}
+            </View> : <View style={styles.playContainer}/> }
           </Animated.View>
           <ControlBar
             toggleFS={() => this.props.toggleFS()}
