@@ -195,7 +195,7 @@ class Controls extends Component {
               loading={loading}
               theme={center}
             />
-            { !disableSeek ? <View style={styles.playContainer}>
+            { !disableSeek && <View style={styles.playContainer}>
               <Touchable onPress={() => this.onForwardButtonClickSeek(currentTime)}>
                 <View
                   style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
@@ -211,7 +211,7 @@ class Controls extends Component {
                   />
                 </View>
               </Touchable>
-            </View> : <View style={styles.playContainer}/> }
+            </View>}
           </Animated.View>
           <ControlBar
             toggleFS={() => this.props.toggleFS()}
