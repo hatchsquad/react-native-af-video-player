@@ -69,10 +69,12 @@ class Controls extends Component {
     const end = currentVideoToPlay.endTime;
     const duration = this.props.duration;
     const currentTime = new Date().getTime() + this.props.timeDifference;
-    const seekTime = (currentTime - start);
-    if( this.props.currentTime > seekTime ){
-      this.props.goLive(0, true);
-    }
+    const seekTime = (currentTime - start)/1000;
+    console.log("fnjfnfnfnhfnfh",  this.props.currentTime, seekTime);
+    // if( this.props.currentTime > seekTime ){
+    //   console.log("2222222222222222222222222222222222222222222222222222222", this.props.currentTime, seekTime);
+    //   this.props.goLive(0, true);
+    // }
   }
   onBackButtonClickSeek(currentTime){
     if (this.props.disableSeek) {
@@ -83,7 +85,23 @@ class Controls extends Component {
     }
   }
   onForwardButtonClickSeek(currentTime){
-    this.props.seekTo(currentTime + 10);
+    if (this.props.disableSeek) {
+      const {currentVideoToPlay} = this.props;
+      const start = currentVideoToPlay.startTime;
+      const end = currentVideoToPlay.endTime;
+      const duration = this.props.duration;
+      const current = new Date().getTime() + this.props.timeDifference;
+      const seekTime = (current - start)/1000;
+      if((currentTime+10) <= seekTime){
+        this.props.seekTo(currentTime + 10);
+      } else{
+        this.props.goLive(1, true);
+      }
+      console.log("33333333333333333333333333333333333");
+    } else {
+      this.props.seekTo(currentTime + 10);
+    }
+    
   }
 
   componentDidMount() {

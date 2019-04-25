@@ -82,7 +82,8 @@ class Video extends Component {
     const end = currentVideoToPlay.endTime;
     const duration = this.state.duration;
     const currentTime = new Date().getTime() + this.props.timeDifference;
-    const seekTime = currentTime - start;
+    const seekTime = (currentTime - start)/1000;
+    console.log("11111111111111111111111111111111111111111111111111111111111", seekTime, duration, start, currentTime, end);
     if(lastLiveWatchingTime !== 0){
       if(seekTime <= duration){
         this.seekTo(seekTime);
@@ -123,6 +124,7 @@ class Video extends Component {
     }, () => {
       Animated.timing(this.animInline, { toValue: inlineHeight, duration: 200 }).start()
       this.props.onPlay(!this.state.paused)
+      {this.state.isLive && this.goLive(1, true)}
       if (!this.state.paused) {
         KeepAwake.activate()
         if (this.props.fullScreenOnly) {
