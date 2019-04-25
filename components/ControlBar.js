@@ -1,17 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { StyleSheet } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
-import { ToggleIcon, Time, Scrubber } from './'
+import React from "react";
+import PropTypes from "prop-types";
+import { StyleSheet, View } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import { ToggleIcon, Time, Scrubber } from "./";
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    height: 35,
-    alignSelf: 'stretch',
-    justifyContent: 'flex-end'
+    flexDirection: "row",
+    alignSelf: "stretch",
+    justifyContent: "flex-end"
   }
-})
+});
 
 const ControlBar = (props) => {
   const {
@@ -24,10 +23,10 @@ const ControlBar = (props) => {
     fullscreen,
     theme,
     inlineOnly,
-    disableSeek,
+    disableSeek
   } = props
   return (
-    <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']} style={styles.container}>
+    <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']} style={[styles.container, {height: fullscreen ? 80 : 35}]}>
       <Time time={currentTime} theme={theme.seconds} />
       {!disableSeek && <Scrubber
         onSeek={pos => onSeek(pos)}
@@ -54,7 +53,7 @@ const ControlBar = (props) => {
         isOn={fullscreen}
         theme={theme.fullscreen}
       />}
-    </LinearGradient>
+      </LinearGradient>
   )
 }
 
@@ -70,7 +69,7 @@ ControlBar.propTypes = {
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
   theme: PropTypes.object.isRequired,
-  disableSeek:PropTypes.bool
-}
+  disableSeek: PropTypes.bool,
+};
 
 export { ControlBar }

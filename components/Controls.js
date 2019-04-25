@@ -5,7 +5,8 @@ import {
   Animated,
   StyleSheet,
   TouchableWithoutFeedback as Touchable,
-  Text
+  TouchableOpacity,
+  Text,
 } from 'react-native'
 import Icons from "react-native-vector-icons/MaterialIcons";
 import {
@@ -13,8 +14,10 @@ import {
   ControlBar,
   Loading,
   TopBar,
-  ProgressBar
-} from './'
+  ProgressBar,
+  FullScreenVideoList
+} from './index'
+import {isEmpty} from './utils';
 const backgroundColor = "transparent";
 const styles = StyleSheet.create({
   container: {
@@ -38,22 +41,46 @@ const styles = StyleSheet.create({
 })
 
 class Controls extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       hideControls: false,
       seconds: 0,
-      seeking: false
+      seeking: false,
+      // lastLiveWatchingTime: 0 ,
+      bottom:-100,
+      toTop: false,
     }
+    this.fullScreenListDrag = this.fullScreenListDrag.bind(this);
     this.animControls = new Animated.Value(1)
     this.scale = new Animated.Value(1)
     this.progressbar = new Animated.Value(2)
     this.onBackButtonClickSeek = this.onBackButtonClickSeek.bind(this);
-    this.onForwardButtonClickSeek =  this.onForwardButtonClickSeek.bind(this);
+    this.onForwardButtonClickSeek =  this.onForwardButtonClickSeek.bind(this);  
   }
-
+  fullScreenListDrag(state){
+    this.setState({
+      toTop: state,
+    });
+  }
+  componentDidUpdate(prevProps, prevState){
+    const {currentVideoToPlay} = this.props;
+    const start = currentVideoToPlay.startTime;
+    const end = currentVideoToPlay.endTime;
+    const duration = this.props.duration;
+    const currentTime = new Date().getTime() + this.props.timeDifference;
+    const seekTime = (currentTime - start);
+    if( this.props.currentTime > seekTime ){
+      this.props.goLive(0, true);
+    }
+  }
   onBackButtonClickSeek(currentTime){
-    this.props.seekTo(currentTime - 10);
+    if (this.props.disableSeek) {
+      this.props.goLive(0, false);
+      this.props.seekTo(currentTime - 10);
+    } else {
+      this.props.seekTo(currentTime - 10);
+    }
   }
   onForwardButtonClickSeek(currentTime){
     this.props.seekTo(currentTime + 10);
@@ -90,7 +117,7 @@ class Controls extends Component {
           break
         case this.state.hideControls:
           break
-        case this.state.seconds > this.props.controlDuration:
+        case this.state.toTop ? (this.state.seconds > 10)  : (this.state.seconds > this.props.controlDuration):
           this.hideControls()
           break
         default:
@@ -100,7 +127,7 @@ class Controls extends Component {
   }
 
   showControls() {
-    this.setState({ hideControls: false }, () => {
+    this.setState({ hideControls: false, bottom: -100 }, () => {
       this.progressbar.setValue(2)
       Animated.parallel([
         Animated.timing(this.animControls, { toValue: 1, duration: 200 }),
@@ -110,10 +137,11 @@ class Controls extends Component {
   }
 
   hideControls() {
-    Animated.parallel([
-      Animated.timing(this.animControls, { toValue: 0, duration: 200 }),
-      Animated.timing(this.scale, { toValue: 0.25, duration: 200 })
-    ]).start(() => this.setState({ hideControls: true, seconds: 0 }))
+    this.fullScreenListDrag(false);
+      Animated.parallel([
+        Animated.timing(this.animControls, { toValue: 0, duration: 200 }),
+        Animated.timing(this.scale, { toValue: 0.25, duration: 200 })
+      ]).start(() => this.setState({ hideControls: true,  bottom: -100, seconds: 0 }))
   }
 
   hiddenControls() {
@@ -153,7 +181,17 @@ class Controls extends Component {
       disableSeek,
       onBack,
       isFullscreen,
-      seekTo
+      seekTo,
+      isLive,
+      goLive,
+      list,
+      timeDifference,
+      playListId,
+      isUpcomingList,
+      navigation,
+      playlistTitle,
+      liveVideo,
+      sendToCLickStream
     } = this.props
 
     const { center, ...controlBar } = theme
@@ -172,7 +210,7 @@ class Controls extends Component {
             toggleFS={() => this.props.toggleFS()}
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
-          { !disableSeek && <View style={styles.playContainer}>
+          { currentTime > 10 ? <View style={styles.playContainer}>
               <Touchable onPress={() => this.onBackButtonClickSeek(currentTime)}>
                 <View
                   style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
@@ -188,14 +226,14 @@ class Controls extends Component {
                   />
                 </View>
               </Touchable>
-            </View>}
+            </View> : <View style={styles.playContainer} />}
             <PlayButton
               onPress={() => this.props.togglePlay()}
               paused={paused}
               loading={loading}
               theme={center}
             />
-            { !disableSeek && <View style={styles.playContainer}>
+            { (!isLive && ((duration - currentTime) > 10) ) ? <View style={styles.playContainer}>
               <Touchable onPress={() => this.onForwardButtonClickSeek(currentTime)}>
                 <View
                   style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
@@ -211,7 +249,7 @@ class Controls extends Component {
                   />
                 </View>
               </Touchable>
-            </View>}
+            </View> : <View style={styles.playContainer}/>}
           </Animated.View>
           <ControlBar
             toggleFS={() => this.props.toggleFS()}
@@ -229,6 +267,22 @@ class Controls extends Component {
             theme={controlBar}
             inlineOnly={inlineOnly}
           />
+          {
+            fullscreen && 
+            !isEmpty(list) && <FullScreenVideoList
+            list={list}
+            timeDifference={timeDifference}
+            playListId={playListId}
+            isUpcomingList={isUpcomingList}
+            navigation={navigation}
+            playlistTitle={playlistTitle}
+            liveVideo={liveVideo}
+            bottom={this.state.bottom}
+            sendToCLickStream={sendToCLickStream}
+            fullScreenListDrag={this.fullScreenListDrag}
+            />
+          }
+          { disableSeek && (currentTime > 0) && <TouchableOpacity onPress={ !isLive ? () =>  goLive(1, true) : null} style={{ position: 'absolute' , right: 5, top:5 ,paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: isLive ? "#ff0000" : "#fff"}}>{ isLive && <View style={{height: 6, width: 6, borderRadius: 3, backgroundColor: "#fff", marginRight: 5}}/>}<Text  style={{color: isLive ? "#fff" : "#ff0000", fontSize: 12}}>{isLive ? "LIVE" : "GO LIVE"}</Text></TouchableOpacity>}
         </Animated.View>
       </Touchable>
     )
@@ -263,9 +317,19 @@ Controls.propTypes = {
   logo: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired,
   disableSeek:PropTypes.bool,
-  onBack: PropTypes.func,
+  onBack: PropTypes.func.isRequired,
   isFullscreen: PropTypes.bool.isRequired,
   seekTo: PropTypes.func.isRequired,
+  isLive:PropTypes.bool.isRequired,
+  goLive:PropTypes.func.isRequired,
+  list: PropTypes.array,
+  timeDifference: PropTypes.number,
+  playListId: PropTypes.string,
+  isUpcomingList: PropTypes.bool,
+  navigation: PropTypes.object,
+  playlistTitle: PropTypes.string,
+  liveVideo: PropTypes.object,
+  sendToCLickStream: PropTypes.func
 }
 
 export { Controls }
