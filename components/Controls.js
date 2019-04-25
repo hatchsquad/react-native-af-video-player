@@ -63,19 +63,19 @@ class Controls extends Component {
       toTop: state,
     });
   }
-  componentDidUpdate(prevProps, prevState){
-    const {currentVideoToPlay} = this.props;
-    const start = currentVideoToPlay.startTime;
-    const end = currentVideoToPlay.endTime;
-    const duration = this.props.duration;
-    const currentTime = new Date().getTime() + this.props.timeDifference;
-    const seekTime = (currentTime - start)/1000;
-    console.log("fnjfnfnfnhfnfh",  this.props.currentTime, seekTime);
-    // if( this.props.currentTime > seekTime ){
-    //   console.log("2222222222222222222222222222222222222222222222222222222", this.props.currentTime, seekTime);
-    //   this.props.goLive(0, true);
-    // }
-  }
+  // componentDidUpdate(prevProps, prevState){
+  //   const {currentVideoToPlay} = this.props;
+  //   const start = currentVideoToPlay.startTime;
+  //   const end = currentVideoToPlay.endTime;
+  //   const duration = this.props.duration;
+  //   const currentTime = new Date().getTime() + this.props.timeDifference;
+  //   const seekTime = (currentTime - start)/1000;
+  //   console.log("fnjfnfnfnhfnfh",  this.props.currentTime, seekTime);
+  //   // if( this.props.currentTime > seekTime ){
+  //   //   console.log("2222222222222222222222222222222222222222222222222222222", this.props.currentTime, seekTime);
+  //   //   this.props.goLive(0, true);
+  //   // }
+  // }
   onBackButtonClickSeek(currentTime){
     if (this.props.disableSeek) {
       this.props.goLive(0, false);
