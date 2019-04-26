@@ -69,6 +69,7 @@ class Video extends Component {
       seeking: false,
       renderError: false,
       isLive: props.disableSeek,
+      isStillLive: props.disableSeek
     }
     this.animInline = new Animated.Value(Win.width * 0.5625)
     this.animFullscreen = new Animated.Value(Win.width * 0.5625)
@@ -83,6 +84,7 @@ class Video extends Component {
     const duration = this.state.duration;
     const currentTime = new Date().getTime() + this.props.timeDifference;
     const seekTime = (currentTime - start)/1000;
+    console.log("11111111111111111111111111111111111111111111111111111111111", seekTime, duration, start, currentTime, end);
     if(seekState !== 0){
       if(seekTime <= duration){
         this.seekTo(seekTime);
@@ -123,7 +125,7 @@ class Video extends Component {
     }, () => {
       Animated.timing(this.animInline, { toValue: inlineHeight, duration: 200 }).start()
       this.props.onPlay(!this.state.paused)
-      {this.state.isLive && this.goLive(1, true)}
+      {this.props.disableSeek && this.goLive(1, true)}
       if (!this.state.paused) {
         KeepAwake.activate()
         if (this.props.fullScreenOnly) {
@@ -147,7 +149,7 @@ class Video extends Component {
     const { loop } = this.props
     if (!loop) this.pause()
     this.onSeekRelease(0)
-    this.setState({ currentTime: 0 }, () => {
+    this.setState({ currentTime: 0, isStillLive: false }, () => {
       if (!loop) this.controls.showControls()
     })
   }
@@ -441,7 +443,7 @@ class Video extends Component {
           // onBuffer={() => this.onBuffer()} // Callback when remote video is buffering
           onTimedMetadata={e => onTimedMetadata(e)} // Callback when the stream receive some metadata
         />
-        { disableSeek && (currentTime > 0) && <View style={{ position: "absolute", right: 5, top:5 ,paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: this.state.isLive ? "#ff0000" : "#fff"}}>{ this.state.isLive && <View style={{height: 6, width: 6, borderRadius: 3, backgroundColor: "#fff", marginRight: 5}}/>}<Text  style={{color: this.state.isLive ? "#fff" : "#ff0000", fontSize: 12}}>{this.state.isLive ? "LIVE" : "GO LIVE"}</Text></View>}
+        { this.state.isStillLive && (currentTime > 0) && <View style={{ position: "absolute", right: 5, top:5 ,paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: this.state.isLive ? "#ff0000" : "#fff"}}>{ this.state.isLive && <View style={{height: 6, width: 6, borderRadius: 3, backgroundColor: "#fff", marginRight: 5}}/>}<Text  style={{color: this.state.isLive ? "#fff" : "#ff0000", fontSize: 12}}>{this.state.isLive ? "LIVE" : "GO LIVE"}</Text></View>}
         <Controls
           ref={(ref) => { this.controls = ref }}
           toggleMute={() => this.toggleMute()}
@@ -478,6 +480,7 @@ class Video extends Component {
           liveVideo={liveVideo}
           sendToCLickStream={sendToCLickStream}
           currentVideoToPlay={currentVideoToPlay}
+          isStillLive={this.state.isStillLive}
         />
       </Animated.View>
     )
