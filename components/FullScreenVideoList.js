@@ -20,6 +20,7 @@ import {
   ProgressBar,
   VideoTile
 } from "./index";
+import { ToggleIcon } from './';
 
 import { isEmpty } from "./utils";
 const { height, width } = Dimensions.get("window");
@@ -180,6 +181,20 @@ class FullScreenVideoList extends Component {
       toTop: false
     };
   }
+
+  componentDidUpdate() {
+    if (this.props.showPlaylist) {
+      Animated.timing(this.state.bottom, {
+        toValue: 0,
+        duration: 200,
+      }).start();
+    } else {
+      Animated.timing(this.state.bottom, {
+        toValue: -100,
+        duration: 200,
+      }).start();
+    }
+  }
 //   snapToTop = () => {
 //     Animated.timing(this.state.position, {
 //       toValue: { x: 0, y: 0 },
@@ -208,10 +223,23 @@ class FullScreenVideoList extends Component {
       navigation,
       playlistTitle,
       liveVideo,
-      sendToCLickStream
+      sendToCLickStream,
+      showPlaylist,
+      togglePlaylist,
+      theme
     } = this.props;
     return !isEmpty(list) ? (
-      <Animated.View {...this.parentResponder.panHandlers} style={{ position: "absolute", bottom: this.state.bottom }}>
+      <Animated.View style={{ position: "absolute", bottom: this.state.bottom }}>
+        {
+          (showPlaylist) && <ToggleIcon
+            paddingRight
+            onPress={() => togglePlaylist()}
+            iconOff="keyboard-arrow-down"
+            iconOn="keyboard-arrow-up"
+            isOn={showPlaylist}
+            theme={theme.fullscreen}
+          />
+        }
         <FlatList
           showsHorizontalScrollIndicator={false}
           data={list}
@@ -254,7 +282,10 @@ FullScreenVideoList.propTypes = {
   liveVideo: PropTypes.object,
   bottom: PropTypes.number,
   sendToCLickStream: PropTypes.func,
-  fullScreenListDrag: PropTypes.func
+  showPlaylist: PropTypes.bool,
+  fullScreenListDrag: PropTypes.func,
+  togglePlaylist: PropTypes.func,
+  theme: PropTypes.object.isRequired,
 };
 
 export { FullScreenVideoList };

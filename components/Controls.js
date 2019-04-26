@@ -49,6 +49,7 @@ class Controls extends Component {
       seeking: false,
       bottom:-100,
       toTop: false,
+      showPlaylist: false,
     }
     this.fullScreenListDrag = this.fullScreenListDrag.bind(this);
     this.animControls = new Animated.Value(1)
@@ -181,6 +182,10 @@ class Controls extends Component {
     )
   }
 
+  togglePlaylist() {
+    this.setState({ showPlaylist: !this.state.showPlaylist });
+  }
+
   displayedControls() {
     const {
       paused,
@@ -286,6 +291,8 @@ class Controls extends Component {
             theme={controlBar}
             inlineOnly={inlineOnly}
             isStillLive={isStillLive}
+            showPlaylist={this.state.showPlaylist}
+            togglePlaylist={() => this.togglePlaylist()}
           />
           {
             fullscreen && 
@@ -300,6 +307,9 @@ class Controls extends Component {
             bottom={this.state.bottom}
             sendToCLickStream={sendToCLickStream}
             fullScreenListDrag={this.fullScreenListDrag}
+            showPlaylist={this.state.showPlaylist}
+            togglePlaylist={() => this.togglePlaylist()}
+            theme={controlBar}
             />
           }
           { isStillLive && (currentTime > 0) && <TouchableOpacity onPress={ !isLive ? () =>  goLive(1, true) : null} style={{ position: 'absolute' , right: 5, top:5 ,paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: isLive ? "#ff0000" : "#fff"}}>{ isLive && <View style={{height: 6, width: 6, borderRadius: 3, backgroundColor: "#fff", marginRight: 5}}/>}<Text  style={{color: isLive ? "#fff" : "#ff0000", fontSize: 12}}>{isLive ? "LIVE" : "GO LIVE"}</Text></TouchableOpacity>}
@@ -350,7 +360,8 @@ Controls.propTypes = {
   playlistTitle: PropTypes.string,
   liveVideo: PropTypes.object,
   sendToCLickStream: PropTypes.func,
-  isStillLive: PropTypes.bool
+  isStillLive: PropTypes.bool,
+  togglePlaylist: PropTypes.func
 }
 
 export { Controls }

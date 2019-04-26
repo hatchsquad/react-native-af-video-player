@@ -24,7 +24,9 @@ const ControlBar = (props) => {
     theme,
     inlineOnly,
     disableSeek,
-    isStillLive
+    isStillLive,
+    togglePlaylist,
+    showPlaylist
   } = props
   return (
     <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']} style={[styles.container, {height: fullscreen ? 80 : 35}]}>
@@ -54,6 +56,14 @@ const ControlBar = (props) => {
         isOn={fullscreen}
         theme={theme.fullscreen}
       />}
+      {fullscreen && <ToggleIcon
+        paddingRight
+        onPress={() => togglePlaylist()}
+        iconOff="keyboard-arrow-down"
+        iconOn="keyboard-arrow-up"
+        isOn={showPlaylist}
+        theme={theme.fullscreen}
+      />}
       </LinearGradient>
   )
 }
@@ -71,7 +81,9 @@ ControlBar.propTypes = {
   duration: PropTypes.number.isRequired,
   theme: PropTypes.object.isRequired,
   disableSeek: PropTypes.bool,
-  isStillLive: PropTypes.bool
+  isStillLive: PropTypes.bool,
+  showPlaylist: PropTypes.bool,
+  togglePlaylist: PropTypes.func
 };
 
 export { ControlBar }
