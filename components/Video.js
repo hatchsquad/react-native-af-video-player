@@ -8,7 +8,10 @@ import {
   BackHandler,
   Animated,
   Image,
-  Alert
+  Alert,
+  ScrollView,
+  View,
+  TouchableOpacity
 } from 'react-native'
 import VideoPlayer from 'react-native-video'
 import KeepAwake from 'react-native-keep-awake'
@@ -64,14 +67,33 @@ class Video extends Component {
       progress: 0,
       currentTime: 0,
       seeking: false,
-      renderError: false
+      renderError: false,
+      isLive: props.disableSeek,
+      isStillLive: props.disableSeek
     }
     this.animInline = new Animated.Value(Win.width * 0.5625)
     this.animFullscreen = new Animated.Value(Win.width * 0.5625)
     this.BackHandler = this.BackHandler.bind(this)
     this.onRotated = this.onRotated.bind(this)
+    this.goLive = this.goLive.bind(this);
   }
-
+  goLive(seekState, liveState){
+    const {currentVideoToPlay} = this.props;
+    const start = currentVideoToPlay.startTime;
+    const end = currentVideoToPlay.endTime;
+    const duration = this.state.duration;
+    const currentTime = new Date().getTime() + this.props.timeDifference;
+    const seekTime = (currentTime - start)/1000;
+    console.log("11111111111111111111111111111111111111111111111111111111111", seekTime, duration, start, currentTime, end);
+    if(seekState !== 0){
+      if(seekTime <= duration){
+        this.seekTo(seekTime);
+      } else{
+        this.seekTo(duration);
+      }
+    }
+    this.setState({isLive: liveState});
+  }
   componentDidMount() {
     Dimensions.addEventListener('change', this.onRotated)
     BackHandler.addEventListener('hardwareBackPress', this.BackHandler)
@@ -103,6 +125,7 @@ class Video extends Component {
     }, () => {
       Animated.timing(this.animInline, { toValue: inlineHeight, duration: 200 }).start()
       this.props.onPlay(!this.state.paused)
+      {this.props.disableSeek && this.goLive(1, true)}
       if (!this.state.paused) {
         KeepAwake.activate()
         if (this.props.fullScreenOnly) {
@@ -126,7 +149,7 @@ class Video extends Component {
     const { loop } = this.props
     if (!loop) this.pause()
     this.onSeekRelease(0)
-    this.setState({ currentTime: 0 }, () => {
+    this.setState({ currentTime: 0, isStillLive: false }, () => {
       if (!loop) this.controls.showControls()
     })
   }
@@ -361,7 +384,16 @@ class Video extends Component {
       disableSeek,
       progressUpdateInterval,
       onBack,
-      isFullscreen
+      isFullscreen,
+      list,
+      timeDifference,
+      navigation,
+      playListId,
+      playlistTitle,
+      isUpcomingList,
+      liveVideo,
+      sendToCLickStream,
+      currentVideoToPlay
     } = this.props
 
     const inline = {
@@ -375,6 +407,7 @@ class Video extends Component {
     }
 
     return (
+      
       <Animated.View
         style={[
           styles.background,
@@ -410,6 +443,7 @@ class Video extends Component {
           // onBuffer={() => this.onBuffer()} // Callback when remote video is buffering
           onTimedMetadata={e => onTimedMetadata(e)} // Callback when the stream receive some metadata
         />
+        { this.state.isStillLive && (currentTime > 0) && <View style={{ position: "absolute", right: 5, top:5 ,paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: this.state.isLive ? "#ff0000" : "#fff"}}>{ this.state.isLive && <View style={{height: 6, width: 6, borderRadius: 3, backgroundColor: "#fff", marginRight: 5}}/>}<Text  style={{color: this.state.isLive ? "#fff" : "#ff0000", fontSize: 12}}>{this.state.isLive ? "LIVE" : "GO LIVE"}</Text></View>}
         <Controls
           ref={(ref) => { this.controls = ref }}
           toggleMute={() => this.toggleMute()}
@@ -435,6 +469,18 @@ class Video extends Component {
           onBack = {onBack}
           isFullscreen={isFullscreen}
           seekTo={seconds => this.seekTo(seconds)}
+          isLive={this.state.isLive}
+          goLive={this.goLive}
+          list={list}
+          timeDifference={timeDifference}
+          navigation={navigation}
+          isUpcomingList={isUpcomingList}
+          playListId={playListId}
+          playlistTitle={playlistTitle}
+          liveVideo={liveVideo}
+          sendToCLickStream={sendToCLickStream}
+          currentVideoToPlay={currentVideoToPlay}
+          isStillLive={this.state.isStillLive}
         />
       </Animated.View>
     )
@@ -489,7 +535,15 @@ Video.propTypes = {
   controlDuration: PropTypes.number,
   resizeMode: PropTypes.string,
   onBack: PropTypes.func,
-  isFullscreen: PropTypes.bool
+  isFullscreen: PropTypes.bool,
+  list: PropTypes.array,
+  timeDifference: PropTypes.number,
+  playListId: PropTypes.string,
+  isUpcomingList: PropTypes.bool,
+  navigation: PropTypes.object,
+  playlistTitle: PropTypes.string,
+  liveVideo: PropTypes.object,
+  sendToCLickStream: PropTypes.func
 }
 
 Video.defaultProps = {
@@ -521,7 +575,7 @@ Video.defaultProps = {
   controlDuration: 3,
   resizeMode: 'contain',
   onBack : () => {},
-  isFullscreen: false
+  isFullscreen: false,
 }
 
 export default Video
