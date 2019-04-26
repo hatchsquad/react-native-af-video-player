@@ -76,15 +76,14 @@ class Video extends Component {
     this.onRotated = this.onRotated.bind(this)
     this.goLive = this.goLive.bind(this);
   }
-  goLive(lastLiveWatchingTime, liveState){
+  goLive(seekState, liveState){
     const {currentVideoToPlay} = this.props;
     const start = currentVideoToPlay.startTime;
     const end = currentVideoToPlay.endTime;
     const duration = this.state.duration;
     const currentTime = new Date().getTime() + this.props.timeDifference;
     const seekTime = (currentTime - start)/1000;
-    console.log("11111111111111111111111111111111111111111111111111111111111", seekTime, duration, start, currentTime, end);
-    if(lastLiveWatchingTime !== 0){
+    if(seekState !== 0){
       if(seekTime <= duration){
         this.seekTo(seekTime);
       } else{

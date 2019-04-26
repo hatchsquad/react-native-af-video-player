@@ -47,7 +47,6 @@ class Controls extends Component {
       hideControls: false,
       seconds: 0,
       seeking: false,
-      // lastLiveWatchingTime: 0 ,
       bottom:-100,
       toTop: false,
     }
