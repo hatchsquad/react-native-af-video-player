@@ -59,8 +59,8 @@ const ControlBar = (props) => {
       {fullscreen && <ToggleIcon
         paddingRight
         onPress={() => togglePlaylist()}
-        iconOff="keyboard-arrow-down"
-        iconOn="keyboard-arrow-up"
+        iconOff="keyboard-arrow-up"
+        iconOn="keyboard-arrow-down"
         isOn={showPlaylist}
         theme={theme.fullscreen}
       />}
