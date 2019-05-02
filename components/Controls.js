@@ -215,7 +215,8 @@ class Controls extends Component {
       playlistTitle,
       liveVideo,
       sendToCLickStream,
-      isStillLive
+      isStillLive,
+      onVideoSelected
     } = this.props
 
     const { center, ...controlBar } = theme
@@ -310,6 +311,7 @@ class Controls extends Component {
             showPlaylist={this.state.showPlaylist}
             togglePlaylist={() => this.togglePlaylist()}
             theme={controlBar}
+            onVideoSelected={onVideoSelected}
             />
           }
           { isStillLive && (currentTime > 0) && <TouchableOpacity onPress={ !isLive ? () =>  goLive(1, true) : null} style={{ position: 'absolute' , right: 5, top:5 ,paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: isLive ? "#ff0000" : "#fff"}}>{ isLive && <View style={{height: 6, width: 6, borderRadius: 3, backgroundColor: "#fff", marginRight: 5}}/>}<Text  style={{color: isLive ? "#fff" : "#ff0000", fontSize: 12}}>{isLive ? "LIVE" : "GO LIVE"}</Text></TouchableOpacity>}

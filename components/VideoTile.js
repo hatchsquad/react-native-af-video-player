@@ -16,7 +16,7 @@ const { width, height } = Dimensions.get('window');
 
 class VideoTile extends PureComponent {
     render() {
-        const { playListId, videoId, title, imageUri, descriptionText, navigation, vCounter, isUpcomingList, playlistTitle, startTime, endTime, duration, index, timeDifference, liveVideo, sendToCLickStream } = this.props;
+        const { playListId, videoId, title, imageUri, descriptionText, navigation, vCounter, isUpcomingList, playlistTitle, startTime, endTime, duration, index, timeDifference, liveVideo, sendToCLickStream, onVideoSelected } = this.props;
 
 
         const currentTime = new Date().getTime() + timeDifference;
@@ -53,7 +53,9 @@ class VideoTile extends PureComponent {
                     value3: index + 1,
                 };
                 sendToCLickStream('growth_app', 'click', 'app_classroom_videodetail_video_clicked', null, clickstreamParams);
-                navigation.replace('ClassRoomLive', { videoId, playListId, isUpcomingList, playlistTitle, title, index, liveVideo });
+                // navigation.replace('ClassRoomLive', { videoId, playListId, isUpcomingList, playlistTitle, title, index, liveVideo });
+                // console.log('@@@@@@@@@@@@@: onVideoSelected : player');
+                onVideoSelected(videoId, playListId, isUpcomingList, null, playlistTitle, title, index, liveVideo);
             }}>
                     {!isEmpty(imageUri) ?
                         <View style={styles.leftSec}>
@@ -173,7 +175,8 @@ VideoTile.propTypes = {
     endTime: PropTypes.number,
     liveVideo: PropTypes.object,
     timeDifference: PropTypes.number,
-    sendToCLickStream: PropTypes.func
+    sendToCLickStream: PropTypes.func,
+    onVideoSelected: PropTypes.func
 };
 
 export { VideoTile }

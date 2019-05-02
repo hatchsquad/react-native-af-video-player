@@ -226,7 +226,8 @@ class FullScreenVideoList extends Component {
       sendToCLickStream,
       showPlaylist,
       togglePlaylist,
-      theme
+      theme,
+      onVideoSelected
     } = this.props;
     return !isEmpty(list) ? (
       <Animated.View style={{ position: "absolute", bottom: this.state.bottom }}>
@@ -263,6 +264,7 @@ class FullScreenVideoList extends Component {
               liveVideo={liveVideo}
               timeDifference={timeDifference}
               sendToCLickStream={sendToCLickStream}
+              onVideoSelected={onVideoSelected}
             />
           )}
         /></Animated.View>

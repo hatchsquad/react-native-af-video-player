@@ -92,6 +92,7 @@ class Video extends Component {
         this.seekTo(duration);
       }
     }
+    this.props.onGoliveClick();
     this.setState({isLive: liveState});
   }
   componentDidMount() {
@@ -393,7 +394,8 @@ class Video extends Component {
       isUpcomingList,
       liveVideo,
       sendToCLickStream,
-      currentVideoToPlay
+      currentVideoToPlay,
+      onVideoSelected
     } = this.props
 
     const inline = {
@@ -481,6 +483,7 @@ class Video extends Component {
           sendToCLickStream={sendToCLickStream}
           currentVideoToPlay={currentVideoToPlay}
           isStillLive={this.state.isStillLive}
+          onVideoSelected={onVideoSelected}
         />
       </Animated.View>
     )
@@ -543,7 +546,8 @@ Video.propTypes = {
   navigation: PropTypes.object,
   playlistTitle: PropTypes.string,
   liveVideo: PropTypes.object,
-  sendToCLickStream: PropTypes.func
+  sendToCLickStream: PropTypes.func,
+  onGoliveClick: PropTypes.func
 }
 
 Video.defaultProps = {
@@ -576,6 +580,7 @@ Video.defaultProps = {
   resizeMode: 'contain',
   onBack : () => {},
   isFullscreen: false,
+  onGoliveClick: () => {}
 }
 
 export default Video
