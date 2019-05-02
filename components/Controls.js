@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback as Touchable,
   TouchableOpacity,
   Text,
+  AppState
 } from 'react-native'
 import Icons from "react-native-vector-icons/MaterialIcons";
 import {
@@ -49,32 +50,43 @@ class Controls extends Component {
       seeking: false,
       bottom:-100,
       toTop: false,
+      appState: AppState.currentState,
     }
     this.fullScreenListDrag = this.fullScreenListDrag.bind(this);
     this.animControls = new Animated.Value(1)
     this.scale = new Animated.Value(1)
     this.progressbar = new Animated.Value(2)
     this.onBackButtonClickSeek = this.onBackButtonClickSeek.bind(this);
-    this.onForwardButtonClickSeek =  this.onForwardButtonClickSeek.bind(this);  
+    this.onForwardButtonClickSeek =  this.onForwardButtonClickSeek.bind(this);
   }
+  handleAppStateChange = (nextAppState) => {
+    const { timeDifference, currentVideoToPlay, isLive, isStillLive, seekTo, duration } = this.props;
+    const current = new Date().getTime() + timeDifference;
+    const start = currentVideoToPlay.startTime;
+    const end = currentVideoToPlay.endTime;
+    const seekTime = (current - start)/1000;
+    if (
+      this.state.appState.match(/inactive|background/) && nextAppState === 'active' && isLive && isStillLive
+    ) {
+      this.setState({ appState: nextAppState});
+      if (seekTime <= duration) {
+        seekTo(seekTime);
+      } else {
+        seekTo(duration);
+      }
+    }
+    if (
+        this.state.appState.match(/inactive|active/) && nextAppState === 'background' && isLive && isStillLive
+    ) {
+        this.setState({ appState: nextAppState });
+    }
+    
+};
   fullScreenListDrag(state){
     this.setState({
       toTop: state,
     });
   }
-  // componentDidUpdate(prevProps, prevState){
-  //   const {currentVideoToPlay} = this.props;
-  //   const start = currentVideoToPlay.startTime;
-  //   const end = currentVideoToPlay.endTime;
-  //   const duration = this.props.duration;
-  //   const currentTime = new Date().getTime() + this.props.timeDifference;
-  //   const seekTime = (currentTime - start)/1000;
-  //   console.log("fnjfnfnfnhfnfh",  this.props.currentTime, seekTime);
-  //   // if( this.props.currentTime > seekTime ){
-  //   //   console.log("2222222222222222222222222222222222222222222222222222222", this.props.currentTime, seekTime);
-  //   //   this.props.goLive(0, true);
-  //   // }
-  // }
   onBackButtonClickSeek(currentTime){
     if (this.props.isStillLive) {
       this.props.goLive(0, false);
@@ -92,7 +104,7 @@ class Controls extends Component {
       const current = new Date().getTime() + this.props.timeDifference;
       const seekTime = (current - start)/1000;
 
-      if((currentTime+10) <= seekTime){
+      if((currentTime+10) < seekTime){
         this.props.seekTo(currentTime + 10);
 
       } else{
@@ -105,10 +117,12 @@ class Controls extends Component {
   }
 
   componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
     this.setTimer()
   }
 
   componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
     clearInterval(this.timer)
   }
 
@@ -213,8 +227,7 @@ class Controls extends Component {
       isStillLive
     } = this.props
 
-    const { center, ...controlBar } = theme
-
+    const { center, ...controlBar } = theme;
     return (
       <Touchable onPress={() => this.hideControls()}>
         <Animated.View style={[styles.container, { opacity: this.animControls, backgroundColor: "#000000AA" }]}>
