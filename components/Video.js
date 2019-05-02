@@ -56,7 +56,7 @@ const defaultTheme = {
 
 class Video extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       paused: !props.autoPlay,
       muted: false,
@@ -84,7 +84,6 @@ class Video extends Component {
     const duration = this.state.duration;
     const currentTime = new Date().getTime() + this.props.timeDifference;
     const seekTime = (currentTime - start)/1000;
-    console.log("11111111111111111111111111111111111111111111111111111111111", seekTime, duration, start, currentTime, end);
     if(seekState !== 0){
       if(seekTime <= duration){
         this.seekTo(seekTime);
