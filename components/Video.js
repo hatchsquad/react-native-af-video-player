@@ -254,6 +254,17 @@ class Video extends Component {
           KeepAwake.deactivate()
         }
       })
+      if (this.state.isStillLive && this.state.paused ) {
+        const {currentVideoToPlay} = this.props;
+        const start = currentVideoToPlay.startTime;
+        const end = currentVideoToPlay.endTime;
+        const duration = this.state.duration;
+        const current = new Date().getTime() + this.props.timeDifference;
+        const seekTime = (current - start)/1000;
+        if (this.state.currentTime < seekTime && this.state.currentTime < duration) {
+          this.goLive(0, false);
+        } 
+      }
     })
   }
 

@@ -51,6 +51,7 @@ class Controls extends Component {
       bottom:-100,
       toTop: false,
       appState: AppState.currentState,
+      showPlaylist: false,
     }
     this.fullScreenListDrag = this.fullScreenListDrag.bind(this);
     this.animControls = new Animated.Value(1)
@@ -58,6 +59,9 @@ class Controls extends Component {
     this.progressbar = new Animated.Value(2)
     this.onBackButtonClickSeek = this.onBackButtonClickSeek.bind(this);
     this.onForwardButtonClickSeek =  this.onForwardButtonClickSeek.bind(this);
+  }
+  togglePlaylist = () => {
+    this.setState({ showPlaylist: !this.state.showPlaylist });
   }
   handleAppStateChange = (nextAppState) => {
     const { timeDifference, currentVideoToPlay, isLive, isStillLive, seekTo, duration } = this.props;
@@ -299,6 +303,8 @@ class Controls extends Component {
             theme={controlBar}
             inlineOnly={inlineOnly}
             isStillLive={isStillLive}
+            showPlaylist={this.state.showPlaylist}
+            togglePlaylist={this.togglePlaylist}
           />
           {
             fullscreen && 
@@ -313,6 +319,9 @@ class Controls extends Component {
             bottom={this.state.bottom}
             sendToCLickStream={sendToCLickStream}
             fullScreenListDrag={this.fullScreenListDrag}
+            showPlaylist={this.state.showPlaylist}
+            togglePlaylist={this.togglePlaylist}
+            theme={controlBar}
             />
           }
           { isStillLive && (currentTime > 0) && <TouchableOpacity onPress={ !isLive ? () =>  goLive(1, true) : null} style={{ position: 'absolute' , right: 5, top:5 ,paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: isLive ? "#ff0000" : "#fff"}}>{ isLive && <View style={{height: 6, width: 6, borderRadius: 3, backgroundColor: "#fff", marginRight: 5}}/>}<Text  style={{color: isLive ? "#fff" : "#ff0000", fontSize: 12}}>{isLive ? "LIVE" : "GO LIVE"}</Text></TouchableOpacity>}

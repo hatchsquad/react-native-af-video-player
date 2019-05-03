@@ -20,6 +20,7 @@ import {
   ProgressBar,
   VideoTile
 } from "./index";
+import { ToggleIcon } from './';
 
 import { isEmpty } from "./utils";
 const { height, width } = Dimensions.get("window");
@@ -180,6 +181,20 @@ class FullScreenVideoList extends Component {
       toTop: false
     };
   }
+
+  componentDidUpdate() {
+    if (this.props.showPlaylist) {
+      Animated.timing(this.state.bottom, {
+        toValue: 0,
+        duration: 200,
+      }).start();
+    } else {
+      Animated.timing(this.state.bottom, {
+        toValue: -100,
+        duration: 200,
+      }).start();
+    }
+  }
 //   snapToTop = () => {
 //     Animated.timing(this.state.position, {
 //       toValue: { x: 0, y: 0 },
@@ -208,10 +223,26 @@ class FullScreenVideoList extends Component {
       navigation,
       playlistTitle,
       liveVideo,
-      sendToCLickStream
+      sendToCLickStream,
+      showPlaylist,
+      togglePlaylist,
+      theme,
+      onVideoSelected
     } = this.props;
     return !isEmpty(list) ? (
-      <Animated.View {...this.parentResponder.panHandlers} style={{ position: "absolute", bottom: this.state.bottom }}>
+      <Animated.View style={{ position: "absolute", bottom: this.state.bottom }}>
+        {
+          <View style={{alignSelf: "center"}}>
+          <ToggleIcon
+            paddingRight
+            onPress={() => togglePlaylist()}
+            iconOff="keyboard-arrow-up"
+            iconOn="keyboard-arrow-down"
+            isOn={showPlaylist}
+            theme={theme.fullscreen}
+            size={40}
+          /></View>
+        }
         <FlatList
           showsHorizontalScrollIndicator={false}
           data={list}
@@ -235,6 +266,7 @@ class FullScreenVideoList extends Component {
               liveVideo={liveVideo}
               timeDifference={timeDifference}
               sendToCLickStream={sendToCLickStream}
+              onVideoSelected={onVideoSelected}
             />
           )}
         /></Animated.View>
@@ -254,7 +286,10 @@ FullScreenVideoList.propTypes = {
   liveVideo: PropTypes.object,
   bottom: PropTypes.number,
   sendToCLickStream: PropTypes.func,
-  fullScreenListDrag: PropTypes.func
+  showPlaylist: PropTypes.bool,
+  fullScreenListDrag: PropTypes.func,
+  togglePlaylist: PropTypes.func,
+  theme: PropTypes.object.isRequired,
 };
 
 export { FullScreenVideoList };
