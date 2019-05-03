@@ -53,7 +53,7 @@ class VideoTile extends PureComponent {
                     value3: index + 1,
                 };
                 sendToCLickStream('growth_app', 'click', 'app_classroom_videodetail_video_clicked', null, clickstreamParams);
-                navigation.replace('ClassRoomLive', { videoId, playListId, isUpcomingList, playlistTitle, title, index, liveVideo });
+                navigation.replace('ClassRoomLive', { videoId, playListId, isUpcomingList, playlistTitle, title, index, liveVideo, playListType: navigation.state.params.playListType });
             }}>
                     {!isEmpty(imageUri) ?
                         <View style={styles.leftSec}>

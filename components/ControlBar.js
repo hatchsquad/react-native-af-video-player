@@ -24,10 +24,10 @@ const ControlBar = (props) => {
     theme,
     inlineOnly,
     disableSeek,
-    isStillLive
+    isStillLive,
   } = props
   return (
-    <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']} style={[styles.container, {height: fullscreen ? 80 : 35}]}>
+    <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']} style={[styles.container, {height: fullscreen ? 120 : 35}]}>
       <Time time={currentTime} theme={theme.seconds} />
       {!isStillLive && <Scrubber
         onSeek={pos => onSeek(pos)}
