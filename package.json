@@ -1,6 +1,6 @@
 {
   "name": "react-native-vedantu-video-player",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "dependencies": {
     "react-native-indicators": "^0.13.0",
     "react-native-keep-awake": "^2.0.6",
@@ -18,7 +18,7 @@
     "react-test-renderer": "16.0.0-beta.5"
   },
   "description": "A customisable React Native video player for Android and IOS",
-  "homepage": "https://github.com/abbasfreestyle/react-native-af-video-player#readme",
+  "homepage": "https://github.com/bgoyal2222/react-native-af-video-player#readme",
   "keywords": [
     "react-component",
     "react-native",
@@ -30,14 +30,14 @@
   ],
   "maintainers": [
     {
-      "name": "abbasfreestyle",
-      "email": "abbasfreestyle@gmail.com"
+      "name": "bgoyal2222",
+      "email": "bhaveshgoyal999@gmail.com"
     }
   ],
   "license": "MIT",
   "author": {
-    "name": "Abbas Farid",
-    "email": "abbasfreestyle@gmail.com",
-    "url": "https://github.com/abbasfreestyle"
+    "name": "Bhavesh Goyal",
+    "email": "bhaveshgoyal999@gmail.com",
+    "url": "https://github.com/bgoyal2222"
   }
 }
