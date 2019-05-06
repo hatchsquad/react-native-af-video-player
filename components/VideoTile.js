@@ -10,7 +10,7 @@ import {
 import PropTypes from 'prop-types';
 // import Font from '../../../assets/font';
 import { WaveIndicator } from 'react-native-indicators';
-import { isEmpty, FormatDateTimeMessageServer, msToTime } from './utils';
+import { isEmpty, FormatDateTimeMessageServer, msToTime, numberFormatter } from './utils';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const { width, height } = Dimensions.get('window');
 
@@ -40,7 +40,7 @@ class VideoTile extends PureComponent {
         } else if (currentTime < startTime) {
             status = (<Text numberOfLines={1} ellipsizeMode="tail" style={styles.liveText}>Schduled for {FormatDateTimeMessageServer(startTime, currentTime)}</Text>);
         } else {
-            status = ((!isEmpty(vCounter) && vCounter !== 0) && <Text style={styles.numOfView}>{vCounter} views</Text>);
+            status = ((!isEmpty(vCounter) && vCounter !== 0) && <Text style={styles.numOfView}>{numberFormatter(vCounter)} views</Text>);
         }
         return (
             <TouchableOpacity style={styles.container} onPress={() => {
