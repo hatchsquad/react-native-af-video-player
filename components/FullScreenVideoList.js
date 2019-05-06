@@ -247,14 +247,14 @@ class FullScreenVideoList extends Component {
           showsHorizontalScrollIndicator={false}
           data={list}
           horizontal={true}
-          keyExtractor={(item, index) => `${item.entityId}`}
+          keyExtractor={(item, index) => `${item.entityId ? item.entityId : item.id}`}
           renderItem={({ item, index }) => (
             <VideoTile
               playListId={playListId}
-              videoId={item.entityId}
+              videoId={item.entityId ? item.entityId : item.id}
               isUpcomingList={isUpcomingList}
               title={item.title}
-              imageUri={item.thumbnailUrl}
+              imageUri={item.thumbnailUrl ? item.thumbnailUrl : item.thumbnail}
               descriptionText={item.description}
               navigation={navigation}
               playlistTitle={playlistTitle}
