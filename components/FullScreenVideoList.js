@@ -227,7 +227,8 @@ class FullScreenVideoList extends Component {
       showPlaylist,
       togglePlaylist,
       theme,
-      onVideoSelected
+      onVideoSelected,
+      toggleFS
     } = this.props;
     return !isEmpty(list) ? (
       <Animated.View style={{ position: "absolute", bottom: this.state.bottom }}>
@@ -267,6 +268,7 @@ class FullScreenVideoList extends Component {
               timeDifference={timeDifference}
               sendToCLickStream={sendToCLickStream}
               onVideoSelected={onVideoSelected}
+              toggleFS={toggleFS}
             />
           )}
         /></Animated.View>
@@ -290,6 +292,7 @@ FullScreenVideoList.propTypes = {
   fullScreenListDrag: PropTypes.func,
   togglePlaylist: PropTypes.func,
   theme: PropTypes.object.isRequired,
+  toggleFS: PropTypes.func
 };
 
 export { FullScreenVideoList };
