@@ -10,13 +10,14 @@ import {
 import PropTypes from 'prop-types';
 // import Font from '../../../assets/font';
 import { WaveIndicator } from 'react-native-indicators';
-import { isEmpty, FormatDateTimeMessageServer, msToTime } from './utils';
+import Orientation from 'react-native-orientation';
+import { isEmpty, FormatDateTimeMessageServer, msToTime, numberFormatter } from './utils';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const { width, height } = Dimensions.get('window');
 
 class VideoTile extends PureComponent {
     render() {
-        const { playListId, videoId, title, imageUri, descriptionText, navigation, vCounter, isUpcomingList, playlistTitle, startTime, endTime, duration, index, timeDifference, liveVideo, sendToCLickStream } = this.props;
+        const { playListId, videoId, title, imageUri, descriptionText, navigation, vCounter, isUpcomingList, playlistTitle, startTime, endTime, duration, index, timeDifference, liveVideo, sendToCLickStream, toggleFS } = this.props;
 
 
         const currentTime = new Date().getTime() + timeDifference;
@@ -40,7 +41,7 @@ class VideoTile extends PureComponent {
         } else if (currentTime < startTime) {
             status = (<Text numberOfLines={1} ellipsizeMode="tail" style={styles.liveText}>Schduled for {FormatDateTimeMessageServer(startTime, currentTime)}</Text>);
         } else {
-            status = ((!isEmpty(vCounter) && vCounter !== 0) && <Text style={styles.numOfView}>{vCounter} views</Text>);
+            status = ((!isEmpty(vCounter) && vCounter !== 0) && <Text style={styles.numOfView}>{numberFormatter(vCounter)} views</Text>);
         }
         return (
             <TouchableOpacity style={styles.container} onPress={() => {
@@ -52,6 +53,7 @@ class VideoTile extends PureComponent {
                     key3: 'position',
                     value3: index + 1,
                 };
+                Orientation.lockToPortrait();
                 sendToCLickStream('growth_app', 'click', 'app_classroom_videodetail_video_clicked', null, clickstreamParams);
                 navigation.replace('ClassRoomLive', { videoId, playListId, isUpcomingList, playlistTitle, title, index, liveVideo, playListType: navigation.state.params.playListType });
             }}>
@@ -173,7 +175,8 @@ VideoTile.propTypes = {
     endTime: PropTypes.number,
     liveVideo: PropTypes.object,
     timeDifference: PropTypes.number,
-    sendToCLickStream: PropTypes.func
+    sendToCLickStream: PropTypes.func,
+    toggleFS: PropTypes.func
 };
 
 export { VideoTile }
