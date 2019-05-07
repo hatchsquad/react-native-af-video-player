@@ -61,10 +61,6 @@ class Controls extends Component {
   togglePlaylist = () => {
     this.setState({ showPlaylist: !this.state.showPlaylist });
   }
-  toggleFS = () => {
-    this.state.showPlaylist ? this.togglePlaylist() : null;
-    this.props.toggleFS();
-  }
   handleAppStateChange = (nextAppState) => {
     const { timeDifference, currentVideoToPlay, isLive, isStillLive, seekTo, duration } = this.props;
     const current = new Date().getTime() + timeDifference;
@@ -89,6 +85,13 @@ class Controls extends Component {
     
 };
   onBackButtonClickSeek(currentTime){
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: 'backward',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
     if (this.props.isStillLive) {
       this.props.goLive(0, false);
       this.props.seekTo(currentTime - 10);
@@ -97,6 +100,13 @@ class Controls extends Component {
     }
   }
   onForwardButtonClickSeek(currentTime){
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: 'forward',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
     if (this.props.isStillLive) {
       const {currentVideoToPlay} = this.props;
       const start = currentVideoToPlay.startTime;
@@ -224,7 +234,8 @@ class Controls extends Component {
       playlistTitle,
       liveVideo,
       sendToCLickStream,
-      isStillLive
+      isStillLive,
+      videoId
     } = this.props
 
     const { center, ...controlBar } = theme;
@@ -239,7 +250,7 @@ class Controls extends Component {
             theme={{ title: theme.title, more: theme.more }}
             isFullscreen={isFullscreen}
             onBack={onBack}
-            toggleFS={ this.toggleFS}
+            toggleFS={() => this.props.toggleFS()}
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
           { (currentTime > 10 && !this.state.showPlaylist) ? <View style={styles.playContainer}>
@@ -368,7 +379,8 @@ Controls.propTypes = {
   playlistTitle: PropTypes.string,
   liveVideo: PropTypes.object,
   sendToCLickStream: PropTypes.func,
-  isStillLive: PropTypes.bool
+  isStillLive: PropTypes.bool,
+  videoId: PropTypes.string.isRequired,
 }
 
 export { Controls }
