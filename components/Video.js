@@ -466,7 +466,6 @@ class Video extends Component {
       currentVideoToPlay,
       videoId
     } = this.props
-    console.log("111111111111111111111111111111111", disableSeek);
     const inline = {
       height: inlineHeight,
       alignSelf: 'stretch'
