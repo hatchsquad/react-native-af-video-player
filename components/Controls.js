@@ -49,11 +49,9 @@ class Controls extends Component {
       seconds: 0,
       seeking: false,
       bottom:-100,
-      toTop: false,
       appState: AppState.currentState,
       showPlaylist: false,
     }
-    this.fullScreenListDrag = this.fullScreenListDrag.bind(this);
     this.animControls = new Animated.Value(1)
     this.scale = new Animated.Value(1)
     this.progressbar = new Animated.Value(2)
@@ -86,11 +84,6 @@ class Controls extends Component {
     }
     
 };
-  fullScreenListDrag(state){
-    this.setState({
-      toTop: state,
-    });
-  }
   onBackButtonClickSeek(currentTime){
     if (this.props.isStillLive) {
       this.props.goLive(0, false);
@@ -153,7 +146,7 @@ class Controls extends Component {
           break
         case this.state.hideControls:
           break
-        case this.state.toTop ? (this.state.seconds > 10)  : (this.state.seconds > this.props.controlDuration):
+        case ((this.state.seconds > this.props.controlDuration) && !this.state.showPlaylist ):
           this.hideControls()
           break
         default:
@@ -173,11 +166,10 @@ class Controls extends Component {
   }
 
   hideControls() {
-    this.fullScreenListDrag(false);
       Animated.parallel([
         Animated.timing(this.animControls, { toValue: 0, duration: 200 }),
         Animated.timing(this.scale, { toValue: 0.25, duration: 200 })
-      ]).start(() => this.setState({ hideControls: true,  bottom: -100, seconds: 0 }))
+      ]).start(() => this.setState({ hideControls: true, showPlaylist: false, bottom: -100, seconds: 0 }))
   }
 
   hiddenControls() {
@@ -246,7 +238,7 @@ class Controls extends Component {
             toggleFS={() => this.props.toggleFS()}
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
-          { currentTime > 10 ? <View style={styles.playContainer}>
+          { (currentTime > 10 && !this.state.showPlaylist) ? <View style={styles.playContainer}>
               <Touchable onPress={() => this.onBackButtonClickSeek(currentTime)}>
                 <View
                   style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
@@ -263,13 +255,13 @@ class Controls extends Component {
                 </View>
               </Touchable>
             </View> : <View style={styles.playContainer} />}
-            <PlayButton
+            { !this.state.showPlaylist && <PlayButton
               onPress={() => this.props.togglePlay()}
               paused={paused}
               loading={loading}
               theme={center}
-            />
-            { ((!isLive || !isStillLive ) && ((duration - currentTime) > 10) ) ? <View style={styles.playContainer}>
+            />}
+            { ((!isLive || !isStillLive ) && ((duration - currentTime) > 10) && !this.state.showPlaylist ) ? <View style={styles.playContainer}>
               <Touchable onPress={() => this.onForwardButtonClickSeek(currentTime)}>
                 <View
                   style={{ justifyContent: "center", alignItems: "center",  height: 50, width: 50  }}
@@ -318,7 +310,6 @@ class Controls extends Component {
             liveVideo={liveVideo}
             bottom={this.state.bottom}
             sendToCLickStream={sendToCLickStream}
-            fullScreenListDrag={this.fullScreenListDrag}
             showPlaylist={this.state.showPlaylist}
             togglePlaylist={this.togglePlaylist}
             theme={controlBar}
