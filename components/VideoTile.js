@@ -10,6 +10,7 @@ import {
 import PropTypes from 'prop-types';
 // import Font from '../../../assets/font';
 import { WaveIndicator } from 'react-native-indicators';
+import Orientation from 'react-native-orientation';
 import { isEmpty, FormatDateTimeMessageServer, msToTime, numberFormatter } from './utils';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const { width, height } = Dimensions.get('window');
@@ -52,9 +53,7 @@ class VideoTile extends PureComponent {
                     key3: 'position',
                     value3: index + 1,
                 };
-                if (toggleFS) {
-                    toggleFS();
-                }
+                Orientation.lockToPortrait();
                 sendToCLickStream('growth_app', 'click', 'app_classroom_videodetail_video_clicked', null, clickstreamParams);
                 navigation.replace('ClassRoomLive', { videoId, playListId, isUpcomingList, playlistTitle, title, index, liveVideo, playListType: navigation.state.params.playListType });
             }}>
