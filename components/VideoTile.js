@@ -53,9 +53,9 @@ class VideoTile extends PureComponent {
                     key3: 'position',
                     value3: index + 1,
                 };
-                Orientation.lockToPortrait();
                 sendToCLickStream('growth_app', 'click', 'app_classroom_videodetail_video_clicked', null, clickstreamParams);
                 navigation.replace('ClassRoomLive', { videoId, playListId, isUpcomingList, playlistTitle, title, index, liveVideo, playListType: navigation.state.params.playListType });
+                Orientation.lockToPortrait();
             }}>
                     {!isEmpty(imageUri) ?
                         <View style={styles.leftSec}>
