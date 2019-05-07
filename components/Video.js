@@ -394,7 +394,6 @@ class Video extends Component {
       disableSeek,
       progressUpdateInterval,
       onBack,
-      isFullscreen,
       list,
       timeDifference,
       navigation,
@@ -477,7 +476,7 @@ class Video extends Component {
           inlineOnly={inlineOnly}
           controlDuration={controlDuration}
           onBack = {onBack}
-          isFullscreen={isFullscreen}
+          isFullscreen={fullScreen}
           seekTo={seconds => this.seekTo(seconds)}
           isLive={this.state.isLive}
           goLive={this.goLive}
@@ -545,7 +544,6 @@ Video.propTypes = {
   controlDuration: PropTypes.number,
   resizeMode: PropTypes.string,
   onBack: PropTypes.func,
-  isFullscreen: PropTypes.bool,
   list: PropTypes.array,
   timeDifference: PropTypes.number,
   playListId: PropTypes.string,
@@ -585,7 +583,6 @@ Video.defaultProps = {
   controlDuration: 3,
   resizeMode: 'contain',
   onBack : () => {},
-  isFullscreen: false,
 }
 
 export default Video
