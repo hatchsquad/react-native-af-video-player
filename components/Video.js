@@ -78,6 +78,15 @@ class Video extends Component {
     this.goLive = this.goLive.bind(this);
   }
   goLive(seekState, liveState, fromButton=false){
+    if ( this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null ) {
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: 'go_live',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
     const {currentVideoToPlay} = this.props;
     const start = currentVideoToPlay.startTime;
     const end = currentVideoToPlay.endTime;
@@ -188,6 +197,15 @@ class Video extends Component {
   }
 
   onSeekRelease(percent) {
+    if ( this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null ) {
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: 'seek',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
     const seconds = percent * this.state.duration
     this.setState({ progress: percent, seeking: false }, () => {
       this.player.seek(seconds)
@@ -239,6 +257,15 @@ class Video extends Component {
   }
 
   togglePlay() {
+    if ( this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null ) {
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: this.state.paused ? 'pause' : 'play',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
     this.setState({ paused: !this.state.paused }, () => {
       this.props.onPlay(!this.state.paused)
       Orientation.getOrientation((e, orientation) => {
@@ -272,8 +299,28 @@ class Video extends Component {
       }
     })
   }
-
+  onBack = () => {
+    this.props.onBack;
+    if ( this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null ) {
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: 'back',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
+  }
   toggleFS() {
+    if ( this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null ) {
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: 'fullscreen',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
     this.setState({ fullScreen: !this.state.fullScreen }, () => {
       Orientation.getOrientation((e, orientation) => {
         if (this.state.fullScreen) {
@@ -323,6 +370,15 @@ class Video extends Component {
   }
 
   seekTo(seconds) {
+    if ( this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null ) {
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: 'seek',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
     if ((seconds > this.state.duration || seconds < 0) && !(seconds <10 && seconds >= 0)) {
       // throw new Error(`Current time (${seconds}) exceeded the duration ${this.state.duration}`)
       return false
@@ -407,9 +463,10 @@ class Video extends Component {
       isUpcomingList,
       liveVideo,
       sendToCLickStream,
-      currentVideoToPlay
+      currentVideoToPlay,
+      videoId
     } = this.props
-
+    console.log("111111111111111111111111111111111", disableSeek);
     const inline = {
       height: inlineHeight,
       alignSelf: 'stretch'
@@ -480,7 +537,7 @@ class Video extends Component {
           theme={setTheme}
           inlineOnly={inlineOnly}
           controlDuration={controlDuration}
-          onBack = {onBack}
+          onBack = {this.onBack}
           isFullscreen={fullScreen}
           seekTo={seconds => this.seekTo(seconds)}
           isLive={this.state.isLive}
@@ -495,6 +552,7 @@ class Video extends Component {
           sendToCLickStream={sendToCLickStream}
           currentVideoToPlay={currentVideoToPlay}
           isStillLive={this.state.isStillLive}
+          videoId={videoId}
         />
       </Animated.View>
     )
@@ -556,7 +614,8 @@ Video.propTypes = {
   navigation: PropTypes.object,
   playlistTitle: PropTypes.string,
   liveVideo: PropTypes.object,
-  sendToCLickStream: PropTypes.func
+  sendToCLickStream: PropTypes.func,
+  videoId: PropTypes.string.isRequired,
 }
 
 Video.defaultProps = {

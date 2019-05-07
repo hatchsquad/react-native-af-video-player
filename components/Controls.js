@@ -85,6 +85,15 @@ class Controls extends Component {
     
 };
   onBackButtonClickSeek(currentTime){
+    if (this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null) {
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: 'backward',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
     if (this.props.isStillLive) {
       this.props.goLive(0, false);
       this.props.seekTo(currentTime - 10);
@@ -93,6 +102,15 @@ class Controls extends Component {
     }
   }
   onForwardButtonClickSeek(currentTime){
+    if (this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null) {
+    const clickstreamParams = {
+      key1: 'video_id',
+      value1: this.props.videoId,
+      key2: 'button_name',
+      value2: 'forward',
+  };
+  this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
     if (this.props.isStillLive) {
       const {currentVideoToPlay} = this.props;
       const start = currentVideoToPlay.startTime;
@@ -220,7 +238,8 @@ class Controls extends Component {
       playlistTitle,
       liveVideo,
       sendToCLickStream,
-      isStillLive
+      isStillLive,
+      videoId
     } = this.props
 
     const { center, ...controlBar } = theme;
@@ -364,7 +383,8 @@ Controls.propTypes = {
   playlistTitle: PropTypes.string,
   liveVideo: PropTypes.object,
   sendToCLickStream: PropTypes.func,
-  isStillLive: PropTypes.bool
+  isStillLive: PropTypes.bool,
+  videoId: PropTypes.string.isRequired,
 }
 
 export { Controls }
