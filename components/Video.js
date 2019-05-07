@@ -465,7 +465,7 @@ class Video extends Component {
       sendToCLickStream,
       currentVideoToPlay,
       videoId
-    } = this.props
+    } = this.props;
     const inline = {
       height: inlineHeight,
       alignSelf: 'stretch'
