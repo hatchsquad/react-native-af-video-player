@@ -85,6 +85,7 @@ class Controls extends Component {
     
 };
   onBackButtonClickSeek(currentTime){
+    if (this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null) {
     const clickstreamParams = {
       key1: 'video_id',
       value1: this.props.videoId,
@@ -92,6 +93,7 @@ class Controls extends Component {
       value2: 'backward',
   };
   this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
     if (this.props.isStillLive) {
       this.props.goLive(0, false);
       this.props.seekTo(currentTime - 10);
@@ -100,6 +102,7 @@ class Controls extends Component {
     }
   }
   onForwardButtonClickSeek(currentTime){
+    if (this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null) {
     const clickstreamParams = {
       key1: 'video_id',
       value1: this.props.videoId,
@@ -107,6 +110,7 @@ class Controls extends Component {
       value2: 'forward',
   };
   this.props.sendToCLickStream('growth_app', 'click', 'app_classroom_player_click', null, clickstreamParams);
+}
     if (this.props.isStillLive) {
       const {currentVideoToPlay} = this.props;
       const start = currentVideoToPlay.startTime;
