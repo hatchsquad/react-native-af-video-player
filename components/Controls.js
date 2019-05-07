@@ -61,6 +61,10 @@ class Controls extends Component {
   togglePlaylist = () => {
     this.setState({ showPlaylist: !this.state.showPlaylist });
   }
+  toggleFS = () => {
+    this.state.showPlaylist ?  this.togglePlaylist : null;
+    this.props.toggleFS;
+  }
   handleAppStateChange = (nextAppState) => {
     const { timeDifference, currentVideoToPlay, isLive, isStillLive, seekTo, duration } = this.props;
     const current = new Date().getTime() + timeDifference;
@@ -254,7 +258,7 @@ class Controls extends Component {
             theme={{ title: theme.title, more: theme.more }}
             isFullscreen={isFullscreen}
             onBack={onBack}
-            toggleFS={() => this.props.toggleFS()}
+            toggleFS={() => this.toggleFS()}
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
           { (currentTime > 10 && !this.state.showPlaylist) ? <View style={styles.playContainer}>
