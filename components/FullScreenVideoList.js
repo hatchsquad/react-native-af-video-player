@@ -20,7 +20,6 @@ class FullScreenVideoList extends Component {
     super(props);
     this.state = {
       bottom: new Animated.Value(props.bottom),
-      toTop: false
     };
   }
 
@@ -50,7 +49,8 @@ class FullScreenVideoList extends Component {
       showPlaylist,
       togglePlaylist,
       theme,
-      onVideoSelected
+      onVideoSelected,
+      toggleFS
     } = this.props;
     return !isEmpty(list) ? (
       <Animated.View style={{ position: "absolute", bottom: this.state.bottom }}>
@@ -69,14 +69,14 @@ class FullScreenVideoList extends Component {
           showsHorizontalScrollIndicator={false}
           data={list}
           horizontal={true}
-          keyExtractor={(item, index) => `${item.entityId}`}
+          keyExtractor={(item, index) => `${item.entityId ? item.entityId : item.id}`}
           renderItem={({ item, index }) => (
             <VideoTile
               playListId={playListId}
-              videoId={item.entityId}
+              videoId={item.entityId ? item.entityId : item.id}
               isUpcomingList={isUpcomingList}
               title={item.title}
-              imageUri={item.thumbnailUrl}
+              imageUri={item.thumbnailUrl ? item.thumbnailUrl : item.thumbnail}
               descriptionText={item.description}
               navigation={navigation}
               playlistTitle={playlistTitle}
@@ -89,6 +89,7 @@ class FullScreenVideoList extends Component {
               timeDifference={timeDifference}
               sendToCLickStream={sendToCLickStream}
               onVideoSelected={onVideoSelected}
+              toggleFS={toggleFS}
             />
           )}
         /></Animated.View>
@@ -111,6 +112,7 @@ FullScreenVideoList.propTypes = {
   showPlaylist: PropTypes.bool,
   togglePlaylist: PropTypes.func,
   theme: PropTypes.object.isRequired,
+  toggleFS: PropTypes.func
 };
 
 export { FullScreenVideoList };

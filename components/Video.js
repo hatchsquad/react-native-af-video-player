@@ -77,7 +77,7 @@ class Video extends Component {
     this.onRotated = this.onRotated.bind(this)
     this.goLive = this.goLive.bind(this);
   }
-  goLive(seekState, liveState){
+  goLive(seekState, liveState, fromButton=false){
     const {currentVideoToPlay} = this.props;
     const start = currentVideoToPlay.startTime;
     const end = currentVideoToPlay.endTime;
@@ -91,7 +91,12 @@ class Video extends Component {
         this.seekTo(duration);
       }
     }
-    this.setState({isLive: liveState});
+    if(fromButton){
+      this.setState({isLive: liveState, paused:false});
+    }
+    else {
+      this.setState({isLive: liveState});
+    }
   }
   componentDidMount() {
     Dimensions.addEventListener('change', this.onRotated)
