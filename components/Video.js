@@ -465,8 +465,7 @@ class Video extends Component {
       sendToCLickStream,
       currentVideoToPlay,
       videoId
-    } = this.props
-    console.log("111111111111111111111111111111111", disableSeek);
+    } = this.props;
     const inline = {
       height: inlineHeight,
       alignSelf: 'stretch'
