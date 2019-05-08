@@ -53,7 +53,7 @@ class FullScreenVideoList extends Component {
       toggleFS
     } = this.props;
     return !isEmpty(list) ? (
-      <Animated.View style={{ position: "absolute", bottom: this.state.bottom,  width: width }}>
+      <Animated.View style={{ position: "absolute", bottom: this.state.bottom,  width: height }}>
         {
           <View style={{alignSelf: 'center', justifyContent: 'center' , height: 25,}}>
           <ToggleIcon

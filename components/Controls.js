@@ -263,7 +263,7 @@ class Controls extends Component {
             theme={{ title: theme.title, more: theme.more }}
             isFullscreen={isFullscreen}
             onBack={onBack}
-            toggleFS={() => this.toggleFS()}
+            toggleFS={() => this.props.toggleFS()}
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
           { (currentTime > 10 && !this.state.showPlaylist) ? <View style={styles.playContainer}>
