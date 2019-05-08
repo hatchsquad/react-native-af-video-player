@@ -58,6 +58,11 @@ class Controls extends Component {
     this.onBackButtonClickSeek = this.onBackButtonClickSeek.bind(this);
     this.onForwardButtonClickSeek =  this.onForwardButtonClickSeek.bind(this);
   }
+  componentDidUpdate(){
+    if(!this.props.isFullscreen){
+      this.state.showPlaylist ?  this.togglePlaylist() : null;
+    }
+  }
   togglePlaylist = () => {
     this.setState({ showPlaylist: !this.state.showPlaylist });
   }
