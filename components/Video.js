@@ -76,6 +76,7 @@ class Video extends Component {
     this.BackHandler = this.BackHandler.bind(this)
     this.onRotated = this.onRotated.bind(this)
     this.goLive = this.goLive.bind(this);
+    this.onBack = this.onBack.bind(this);
   }
   goLive(seekState, liveState, fromButton=false){
     if ( this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null ) {
@@ -299,8 +300,8 @@ class Video extends Component {
       }
     })
   }
-  onBack = () => {
-    this.props.onBack;
+  onBack(){
+    this.props.onBack();
     if ( this.props.sendToCLickStream != undefined && this.props.sendToCLickStream!= null ) {
     const clickstreamParams = {
       key1: 'video_id',

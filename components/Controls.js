@@ -58,12 +58,13 @@ class Controls extends Component {
     this.onBackButtonClickSeek = this.onBackButtonClickSeek.bind(this);
     this.onForwardButtonClickSeek =  this.onForwardButtonClickSeek.bind(this);
   }
+  componentDidUpdate(){
+    if(!this.props.isFullscreen){
+      this.state.showPlaylist ?  this.togglePlaylist() : null;
+    }
+  }
   togglePlaylist = () => {
     this.setState({ showPlaylist: !this.state.showPlaylist });
-  }
-  toggleFS = () => {
-    this.state.showPlaylist ?  this.togglePlaylist : null;
-    this.props.toggleFS;
   }
   handleAppStateChange = (nextAppState) => {
     const { timeDifference, currentVideoToPlay, isLive, isStillLive, seekTo, duration } = this.props;
@@ -258,7 +259,7 @@ class Controls extends Component {
             theme={{ title: theme.title, more: theme.more }}
             isFullscreen={isFullscreen}
             onBack={onBack}
-            toggleFS={() => this.toggleFS()}
+            toggleFS={() => this.props.toggleFS()}
           />
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
           { (currentTime > 10 && !this.state.showPlaylist) ? <View style={styles.playContainer}>
