@@ -98,6 +98,25 @@ onPlay                | function | No       | (playing) => {}           | Return
 error                 | boolean, object | No | true                     | Pass in an object to Alert. See https://facebook.github.io/react-native/docs/alert.html
 theme                 | object   | No       | all white                 | Pass in an object to theme. (See example below to see the full list of available settings)
 controlDuration             | number   | No       | 3                 | Set the visibility time of the pause button and the progress bar after the video was started
+disableSeek           | bool     | No       | undefined
+              | It decides whether video is live or not
+videoId               | String   | Yes      | undefined
+              | It is a key or id of the video, need to
+be passed.
+onBack                | Function | No | () => {} |
+              | It is says what we will the behaviour of
+the back button on video, in the non full screen mode.
+progressUpdateInterval| number   | No | undefined| It says after what time in miliseconds the video progress will get updated.
+list                  | Array    | No | undefined| It is the array of the videos to be shown int he full screen mode
+timeDifference        | number   | No | undefined| It is the difference between the local time and server time that will be required to calculate the status of the live video
+navigation            | object   | No | undefined| It is the navigation object used for the operations related to the navigating to other screens
+isUpcomingList        | bool     | No | undefine| It is the boolean vallue used for deciding whether the video list is the list of upcoming videos or not
+playListId            | String   | No | undefined| It is the id of the list of videos passed
+playlistTitle         | String   | No | undefined| It is the title of the list passed
+liveVideo             | String   | No | undefined| It is the status of the video being paseed to play
+sendToCLickStream     | Function | No | undefined| It is the function being used to pass paramaters for analytics work 
+currentVideoToPlay    | Object   | No | undefined| It is an object consisting of start time and end time of the video and required in the case of live video
+
 
 ## Referencing
 
