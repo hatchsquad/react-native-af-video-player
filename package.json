@@ -1,6 +1,6 @@
 {
   "name": "react-native-vedantu-video-player",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "dependencies": {
     "react-native-indicators": "^0.13.0",
     "react-native-keep-awake": "^2.0.6",
