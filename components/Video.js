@@ -465,7 +465,8 @@ class Video extends Component {
       liveVideo,
       sendToCLickStream,
       currentVideoToPlay,
-      videoId
+      videoId,
+      playerStyle
     } = this.props;
     const inline = {
       height: inlineHeight,
@@ -498,7 +499,7 @@ class Video extends Component {
           paused={paused}
           resizeMode={resizeMode}
           repeat={loop}
-          style={fullScreen ? styles.fullScreen : inline}
+          style={playerStyle}
           ref={(ref) => { this.player = ref }}
           rate={rate}
           volume={volume}
@@ -574,6 +575,10 @@ Video.propTypes = {
     PropTypes.number
   ]),
   style: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.number
+  ]),
+  playerStyle: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.number
   ]),
